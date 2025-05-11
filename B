@@ -1,0 +1,48 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+#define _USE_MATH_DEFINES
+#include <string>
+#include <set>
+#include <cstdlib>
+#include <climits>
+#include <map>
+#include <fstream>
+using ll = long long;
+
+using namespace std;
+
+int main() {
+    int n, k, p;
+    ll mod = 1000000007;
+    cin >> n >> k >> p;
+    vector<ll> dp(n * k + 1, 0);
+    vector<ll> dp2(n * k + 1, 0);
+    for (int i = 0; i < k; i++) {
+        dp[i + 1] = 1;
+    }
+    for (int i = 1; i < n; i++) {
+        ll wind = 0;
+        for (int j = 0; j < k; j++) {
+            dp2[j] = wind;
+            wind += dp[j];
+            wind %= mod;
+        }
+        for (int j = k; j < dp.size(); j++) {
+            dp2[j] = wind;
+            wind += dp[j] - dp[j - k] + mod;
+            wind %= mod;
+        }
+        for (int i = 0; i < dp.size(); i++) cout << dp[i] << " ";
+        cout << endl;
+        copy(dp2.begin(), dp2.end(), dp.begin());
+    }
+    ll ans = 0;
+    //for (int i = 0; i < dp.size(); i++) cout << dp[i] << " ";
+    for (int i = p + 1; i < dp.size(); i++) {
+        ans += dp[i];
+        ans %= mod;
+    }
+    cout << ans;
+}
