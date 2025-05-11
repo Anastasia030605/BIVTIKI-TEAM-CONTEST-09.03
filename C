@@ -1,0 +1,104 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <math.h>
+#include <string>
+#include <set>
+#include <cstdlib>
+#include <climits>
+#include <map>
+#include <fstream>
+#include <iomanip>
+using ll = long long;
+
+using namespace std;
+
+//int main() {
+//    ll s, w;
+//    cin >> s >> w;
+//    vector<ll> 
+//}
+
+struct mat {
+    ll a = 1, b = 1, c = 1, d = 0;
+};
+
+mat operator*(mat m1, mat m2) {
+    auto m = mat{ m1.a * m2.a + m1.b * m2.c, m1.a * m2.b + m1.b * m2.d, m1.c * m2.a + m1.d * m2.c, m1.c * m2.b + m1.d * m2.d };
+    return m;
+}
+
+mat fast_pow(mat x, int n, int mod) {
+    if (n == 0) {
+        return mat{ 1, 0, 0, 1 };
+    }
+    mat ans;
+    if (n % 2 == 0) {
+        mat x_p = fast_pow(x, n / 2, mod);
+        ans = x_p * x_p;
+    }
+    else {
+        mat x_p = fast_pow(x, n / 2, mod);
+        ans = x_p * x_p * x;
+    }
+    ans.a %= mod;
+    ans.b %= mod;
+    ans.c %= mod;
+    ans.d %= mod;
+    return ans;
+}
+
+//long long fib(int n) {
+//    return 1 / sqrt(5) * (fast_pow((1 + sqrt(5)) / 2, n) - fast_pow((1 - sqrt(5)) / 2, n));
+//}
+
+
+
+ll fib(int n, int mod) {
+    auto x = fast_pow(mat{ 1, 1, 1, 0 }, n, mod);
+    ll ans = x.c;
+    return ans;
+}
+
+int main() {
+    int p;
+    cin >> p;
+    long long minim = 1e18 + 7;
+    if (p == 2) {
+        cout << 3;
+        return 0;
+    }
+    else if (p == 5) {
+        cout << 20;
+        return 0;
+    }
+    else {
+        if (p % 5 == 1 || p % 5 == 4) {
+            for (int i = 1; i * i <= p - 1; ++i) {
+                if ((p - 1) % i == 0) {
+                    if (i % 2 == 0 && fib(i, p) % p == 0 && fib(i + 1, p) % p == 1) {
+                        cout << i;
+                        return 0;
+                    }
+                    if (((p - 1) / i) % 2 == 0 && fib((p - 1) / i, p) % p == 0 && fib((p - 1) / i + 1, p) % p == 1) {
+                        minim = min(minim, ll(p - 1) / i);
+                    }
+                }
+            }
+        }
+        else {
+            for (int i = 1; i * i <= 2 * p + 2; ++i) {
+                if ((2 * p + 2) % i == 0) {
+                    if (i % 2 == 0 && fib(i, p) % p == 0 && fib(i + 1, p) == 1) {
+                        cout << i;
+                        return 0;
+                    }
+                    if (((2 * p + 2) / i) % 2 == 0 && fib((2 * p + 2) / i, p) % p == 0 && fib((2 * p + 2) / i + 1, p) % p == 1)  {
+                        minim = min(minim, ll(2 * p + 2) / i);
+                    }
+                }
+            }
+        }
+    }
+    cout << minim;
+}
