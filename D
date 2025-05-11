@@ -1,0 +1,27 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <math.h>
+#include <string>
+#include <set>
+#include <cstdlib>
+#include <climits>
+#include <map>
+#include <fstream>
+#include <iomanip>
+using ll = long long;
+
+using namespace std;
+
+int main() {
+    double M_PI = 3.1415926535897;
+    double h, d, r, H, h1, r1, S, V, deg = 34, a;
+    cin >> H >> d;
+    r = d / 2;
+    a = sqrt(H * H + r * r);
+    h1 = (H * sin(deg * M_PI / 180) * r) / (a * sin(asin(H / a) + deg * M_PI / 180));
+    r1 = h1 / tan(deg * M_PI / 180);
+    S = M_PI * r1 * r1;
+    V = S * H / 3;
+    cout << setprecision(20) << V;
+}
